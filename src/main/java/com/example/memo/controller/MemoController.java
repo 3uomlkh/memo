@@ -37,4 +37,15 @@ public class MemoController {
 
         return new MemoResponseDto(memo);
     }
+
+    @PutMapping("/{id}")
+    public MemoResponseDto updateMemoById(
+            @PathVariable Long id,
+            @RequestBody MemoRequestDto dto
+    ) {
+        Memo memo = memoList.get(id);
+        memo.update(dto);
+
+        return new MemoResponseDto(memo);
+    }
 }
