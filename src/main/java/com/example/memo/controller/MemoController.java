@@ -3,6 +3,8 @@ package com.example.memo.controller;
 import com.example.memo.dto.MemoRequestDto;
 import com.example.memo.dto.MemoResponseDto;
 import com.example.memo.entity.Memo;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -16,8 +18,22 @@ public class MemoController {
 
     // 실제로 사용할  Controller API
     // 응답 타입: MemoResponseDto
+//    @PostMapping
+//    public MemoResponseDto createMemo(@RequestBody MemoRequestDto dto) {
+//        // 식별자가 1씩 증가하도록 만듦
+//        long memoId = memoList.isEmpty() ? 1 : Collections.max(memoList.keySet()) + 1;
+//
+//        // 요청받은 데이터로 Memo 객체 생성
+//        Memo memo = new Memo(memoId, dto.getTitle(), dto.getContent());
+//
+//        // Inmemory DB(현재 프로젝트 내에서 만든 자료구조인 memoList)에 Memo 저장
+//        memoList.put(memoId, memo);
+//
+//        return new MemoResponseDto(memo);
+//    }
+
     @PostMapping
-    public MemoResponseDto createMemo(@RequestBody MemoRequestDto dto) {
+    public ResponseEntity<MemoResponseDto> createMemo(@RequestBody MemoRequestDto dto) {
         // 식별자가 1씩 증가하도록 만듦
         long memoId = memoList.isEmpty() ? 1 : Collections.max(memoList.keySet()) + 1;
 
@@ -27,7 +43,7 @@ public class MemoController {
         // Inmemory DB(현재 프로젝트 내에서 만든 자료구조인 memoList)에 Memo 저장
         memoList.put(memoId, memo);
 
-        return new MemoResponseDto(memo);
+        return new ResponseEntity<>(new MemoResponseDto(memo), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
