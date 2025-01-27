@@ -117,6 +117,29 @@ public class MemoController {
         return new ResponseEntity<>(new MemoResponseDto(memo), HttpStatus.OK);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<MemoResponseDto> updateTitle(
+            @PathVariable Long id,
+            @RequestBody MemoRequestDto dto
+    ) {
+
+        Memo memo = memoList.get(id);
+
+        // NPE 방지
+        if (memo == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // 필수값 검증
+        if (dto.getTitle() == null || dto.getContent() != null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        memo.updateTitle(dto);
+
+        return new ResponseEntity<>(new MemoResponseDto(memo), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteMemo(
             @PathVariable Long id
