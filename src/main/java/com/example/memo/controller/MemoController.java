@@ -7,9 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController // 항상 JSON 형태로 통신하기 위해
 @RequestMapping("/memos")// prefix하는 URL 설정 시 사용
@@ -45,6 +43,25 @@ public class MemoController {
 
         return new ResponseEntity<>(new MemoResponseDto(memo), HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public ResponseEntity<List<MemoResponseDto>> findAllMemos() {
+
+        // init List
+        List<MemoResponseDto> responseList = new ArrayList<>();
+
+        // HashMap<Memo> -> List<MemoResponseDto>
+        for (Memo memo : memoList.values()) {
+            MemoResponseDto responseDto = new MemoResponseDto(memo);
+            responseList.add(responseDto);
+        }
+
+        // Map To List - 위 코드와 동일
+//        responseList = memoList.values().stream().map(MemoResponseDto::new).toList();
+
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
 
     @GetMapping("/{id}")
     public MemoResponseDto findMemoById(@PathVariable Long id) {
